@@ -75,35 +75,60 @@ p + geom_line(alpha=0.1)
 
 ## Animated plot!
 
+This uses gganimate
+
+<https://gganimate.com/>
 
 ```{r animation}
 
+#new df which only contains average by year
 cf <- df %>% group_by(year) %>%
   summarise(ave_upper = mean(max_t))
 
+#canvas
 p3 <- ggplot(cf,mapping = aes(x =year,y = ave_upper),frame = year)
 
+#creat animation object
 anim <- p3 + 
   geom_point() +
   transition_manual(year, cumulative = TRUE) +
   ggtitle('The year is: {frame + 1882}')
+ 
+#show
+anim 
 
-anim
-
+#save plot
 anim_save(here("plots","mygif.gif"),anim, renderer = gifski_renderer())
 ```
 
 ## ROLL OVER INTERACTIVE PLOT
 
+
+This uses plotly
+
+<https://plotly.com/ggplot2/>
+
 ```{r rollover}
 
-
+#make plot object, the same as for the static plot
 p <- ggplot(df,mapping = aes(x=month,y=max_t,group=year,col=year))
-# add paint
+# note I make a new object which contains the 'canvas' + 'paint' together
 p4 <- p + geom_line(alpha=0.1)
 
 
+#show plot
 ggplotly(p4)
+
+#save
+saveWidget(ggplotly(p4),file = here('plots','rollover.html'))
+
 ```
 
-```{}
+## Conclusion
+
+It is nice to make animated plots, but they can distract as well as grab attention. Make sure the purpose of making the plot is served by adding animation.
+
+## Colophon
+
+Find the repo for this project here <https://github.com/tomstafford/station>
+
