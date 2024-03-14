@@ -5,7 +5,7 @@ date: "2024-03-14"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE,warning=FALSE)
+knitr::opts_chunk$set(echo = FALSE,warning=FALSE,message=FALSE)
 ```
 
 ```{r initialisation, include = FALSE}
@@ -15,6 +15,9 @@ library(gganimate)
 #install.packages("gifski") # needed for gganimate
 library(plotly) #roll over plots
 library(htmlwidgets) #for saving
+
+# This added after class
+library(zoo) # for rollmean function
 ```
 
 
@@ -88,9 +91,24 @@ cf <- df %>% group_by(year) %>%
 #canvas
 p3 <- ggplot(cf,mapping = aes(x =year,y = ave_upper),frame = year)
 
+# # - - - - This is the code used in the class
+# anim <- p3 + 
+#  geom_point() +
+#  transition_manual(year, cumulative = TRUE) +
+#  ggtitle('The year is: {frame + 1882}')
+#
+
+# # - - - - This code has a rolling mean added
+# Note that we use the rollmean function from the zoo library
+# Above I load the zoo library
+# Here I have explicitly marked that rollmean comes from the zoo library.
+# You don't *have* to do this, but it is good to indicate which functions come from which libraries
+
 #creat animation object
 anim <- p3 + 
   geom_point() +
+  geom_line(aes(y=zoo::rollmean(ave_upper, 7, na.pad=TRUE)),
+                color='red', size=2) +
   transition_manual(year, cumulative = TRUE) +
   ggtitle('The year is: {frame + 1882}')
  
