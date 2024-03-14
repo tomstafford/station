@@ -12,11 +12,17 @@ knitr::opts_chunk$set(echo = TRUE)
 library(here)
 library(tidyverse)
 library(gganimate)
+#install.packages("gifski") # needed for gganimate
 ```
 
 
 ## Get the data!
 
+Our data is here
+
+https://www.metoffice.gov.uk/pub/data/weather/uk/climate/stationdata/sheffielddata.txt
+
+Sheffield Weather Station in Western Park
 ```{r getdata}
 
 source = here("data","sheffielddata.txt")
@@ -24,18 +30,61 @@ source = here("data","sheffielddata.txt")
 # this didn't work
 #df <- read.csv(source,sep='\t',skip =7)
 
+# we're going to load the file as text and clean it first
 df <- readLines(source)
-
+# clean some stuff
 df <- (gsub("Provisional","",df))
-
 df <- (gsub("\\*","",df))
-
 df <- (gsub("\\#","",df))
 
+# now save output as file
 writeLines(df,here("data","modified.txt"))
 
+#import from this
 df <- read.table(here("data","modified.txt"),skip=7,fill=TRUE)
 
 ```
 
+```{r wrangle}
 
+cols <- c("year","month","max_t","min_t","af","rain","sun")
+
+colnames(df) <-cols
+
+df <- df %>%
+  mutate(max_t = as.numeric(max_t))
+
+#remember to come back and convert other vars to numeric
+
+```
+
+Now i am going to visualise some data
+
+## Static plot
+
+```{r plot1}
+
+#create canvas
+p <- ggplot(df,mapping = aes(x=month,y=max_t,group=year,col=year))
+# add paint
+p + geom_line(alpha=0.1)
+
+```
+## Animated plot!
+
+```{r animation}
+
+cf <- df %>% group_by(year) %>%
+  summarise(ave_upper = mean(max_t))
+
+p3 <- ggplot(cf,mapping = aes(x =year,y = ave_upper),frame = year)
+
+anim <- p3 + 
+  geom_point() +
+  transition_manual(year, cumulative = TRUE) +
+  ggtitle('The year is: {frame + 1882}')
+
+anim
+
+anim_save(here("plots","mygif.gif"),anim, renderer = gifski_renderer())
+```
