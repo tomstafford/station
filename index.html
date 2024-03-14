@@ -355,16 +355,39 @@ display: none;
 </div>
 
 
-<div id="history" class="section level2">
-<h2>History!</h2>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<pre class="r"><code>library(here)</code></pre>
+<pre><code>## here() starts at /home/tom/Desktop/station</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(gganimate)</code></pre>
+<div id="get-the-data" class="section level2">
+<h2>Get the data!</h2>
+<pre class="r"><code>source = here(&quot;data&quot;,&quot;sheffielddata.txt&quot;)
+
+# this didn&#39;t work
+#df &lt;- read.csv(source,sep=&#39;\t&#39;,skip =7)
+
+df &lt;- readLines(source)</code></pre>
+<pre><code>## Warning in readLines(source): incomplete final line found on
+## &#39;/home/tom/Desktop/station/data/sheffielddata.txt&#39;</code></pre>
+<pre class="r"><code>df &lt;- (gsub(&quot;Provisional&quot;,&quot;&quot;,df))
+
+df &lt;- (gsub(&quot;\\*&quot;,&quot;&quot;,df))
+
+df &lt;- (gsub(&quot;\\#&quot;,&quot;&quot;,df))
+
+writeLines(df,here(&quot;data&quot;,&quot;modified.txt&quot;))
+
+df &lt;- read.table(here(&quot;data&quot;,&quot;modified.txt&quot;),skip=7,fill=TRUE)</code></pre>
 </div>
 
 
