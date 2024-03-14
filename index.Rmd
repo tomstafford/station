@@ -13,8 +13,8 @@ library(here)
 library(tidyverse)
 library(gganimate)
 #install.packages("gifski") # needed for gganimate
-library(plotly)
-library(htmlwidgets)
+library(plotly) #roll over plots
+library(htmlwidgets) #for saving
 ```
 
 
@@ -94,5 +94,16 @@ anim_save(here("plots","mygif.gif"),anim, renderer = gifski_renderer())
 ```
 
 ## ROLL OVER INTERACTIVE PLOT
+
+```{r rollover}
+
+
+p <- ggplot(df,mapping = aes(x=month,y=max_t,group=year,col=year))
+# add paint
+p4 <- p + geom_line(alpha=0.1)
+
+
+ggplotly(p4)
+```
 
 ```{}
