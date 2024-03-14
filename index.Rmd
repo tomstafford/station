@@ -5,14 +5,16 @@ date: "2024-03-14"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE,warning=FALSE)
 ```
 
-```{r initialisation}
+```{r initialisation, include = FALSE}
 library(here)
 library(tidyverse)
 library(gganimate)
 #install.packages("gifski") # needed for gganimate
+library(plotly)
+library(htmlwidgets)
 ```
 
 
@@ -70,7 +72,9 @@ p <- ggplot(df,mapping = aes(x=month,y=max_t,group=year,col=year))
 p + geom_line(alpha=0.1)
 
 ```
+
 ## Animated plot!
+
 
 ```{r animation}
 
@@ -88,3 +92,7 @@ anim
 
 anim_save(here("plots","mygif.gif"),anim, renderer = gifski_renderer())
 ```
+
+## ROLL OVER INTERACTIVE PLOT
+
+```{}
