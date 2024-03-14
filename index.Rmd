@@ -1,0 +1,17 @@
+---
+title: "Weather Station project"
+output: html_document
+date: "2024-03-14"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## History!
+
+
+```{r cars}
+summary(cars)
+```
+
