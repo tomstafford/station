@@ -8,10 +8,34 @@ date: "2024-03-14"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## History!
-
-
-```{r cars}
-summary(cars)
+```{r initialisation}
+library(here)
+library(tidyverse)
+library(gganimate)
 ```
+
+
+## Get the data!
+
+```{r getdata}
+
+source = here("data","sheffielddata.txt")
+
+# this didn't work
+#df <- read.csv(source,sep='\t',skip =7)
+
+df <- readLines(source)
+
+df <- (gsub("Provisional","",df))
+
+df <- (gsub("\\*","",df))
+
+df <- (gsub("\\#","",df))
+
+writeLines(df,here("data","modified.txt"))
+
+df <- read.table(here("data","modified.txt"),skip=7,fill=TRUE)
+
+```
+
 
